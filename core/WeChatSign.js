@@ -33,7 +33,7 @@ function SignRunner() {
         let clickWechatIcon = null
         if (localOcrUtil.enabled) {
             FloatyInstance.setFloatyText('准备用OCR方式查找')
-            sleep(1000)
+            sleep(10000)
             clickWechatIcon = this.captureAndCheckByImg(wechatIcon_1, '企业微信图标')
             // clickMine = this.captureAndCheckByOcr('^我$', '我', [config.device_width / 2, config.device_height * 0.7])
         }

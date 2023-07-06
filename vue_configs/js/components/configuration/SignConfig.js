@@ -74,6 +74,12 @@ const SignConfig = {
             taskCode: 'Weibo',
             script: 'Weibo.js',
             enabled: true
+          },
+          {
+            name: '企业微信打卡',
+            taskCode: 'WeChatSign',
+            script: 'WeChatSign.js',
+            enabled: true
           }
         ]
       },
@@ -83,6 +89,7 @@ const SignConfig = {
         'BBFarm': '/basic/sign/bbFarm',
         'MiHoYo': '/basic/sign/mihoyo',
         'JingDong': '/basic/sign/jingdong',
+        'WeChatSign': '/basic/sign/WeChatSign',
       }
     }
   },
