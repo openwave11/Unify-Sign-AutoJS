@@ -11,6 +11,7 @@ const WeChatConfig = {
         work_space_3: '',
         sign_banner_4: '',
         sign_banner_4_2: '',
+        sign_btn_back_5: '',
       },
     }
   },
@@ -37,6 +38,7 @@ const WeChatConfig = {
     <tip-block style="margin: 0.5rem">区域输入框左滑可以通过滑块输入数值，也可以通过取色工具获取目标区域信息：<van-button style="margin-left: 0.4rem" plain hairline type="primary" size="mini" @click="openGrayDetector">打开取色工具</van-button></tip-block>
     <base64-image-viewer title="校验‘企业微信图标’按钮" v-model="configs.wechat_icon_1"/>
     <base64-image-viewer title="校验消息中的‘打卡’按钮" v-model="configs.sign_btn_2"/>
+    <base64-image-viewer title="校验‘打卡’按钮点击后的返回按钮" v-model="configs.sign_btn_back_5"/>
     <base64-image-viewer title="校验‘工作台’按钮" v-model="configs.work_space_3"/>
     <base64-image-viewer title="校验‘签到的banner’" v-model="configs.sign_banner_4"/>
     <base64-image-viewer title="校验‘签到的banner2’" v-model="configs.sign_banner_4_2"/>

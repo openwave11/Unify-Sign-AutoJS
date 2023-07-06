@@ -24,6 +24,7 @@ function SignRunner() {
     let workSpace_3 = config.wechat_sign_config.work_space_3
     let signBanner_4 = config.wechat_sign_config.sign_banner_4
     let sign_banner_4_2 = config.wechat_sign_config.sign_banner_4_2
+    let sign_btn_back_5 = config.wechat_sign_config.sign_btn_back_5
 
     this.restartLimit = 3
 
@@ -67,6 +68,7 @@ function SignRunner() {
                 if (this.isAmTime()) {
                     _logUtils.debugForDev(['早上，准备识别上班自动打卡'], true, false)
 
+                    let screen = commonFunctions.captureScreen()
                     let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*上班自动打卡.*')
                     if (find && find.length > 0) {
                         let bounds = find[0].bounds
@@ -80,11 +82,14 @@ function SignRunner() {
                         FloatyInstance.setFloatyInfo('未识别到上班自动打卡，去工作台签到')
                         _logUtils.debugForDev(['早上，未识别到上班自动打卡，去工作台签到'], true, false)
 
+                        this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
+
                         this.workSpaceSign();
                     }
                 } else {
                     _logUtils.debugForDev(['下午，准备识别下班自动打卡'], true, false)
 
+                    let screen = commonFunctions.captureScreen()
                     let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*下班自动打卡.*')
                     if (find && find.length > 0) {
                         let bounds = find[0].bounds
@@ -96,6 +101,8 @@ function SignRunner() {
                     } else {
                         FloatyInstance.setFloatyInfo('未识别到下班自动打卡，去工作台签到')
                         _logUtils.debugForDev(['下午，未识别到下班自动打卡，去工作台签到'], true, false)
+                        this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
+
                         this.workSpaceSign();
 
                     }
