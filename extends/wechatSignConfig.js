@@ -9,6 +9,6 @@ module.exports = function (binder) {
     binder.bindCustomSignConfig('wechat_sign', {
 
     }, [
-        'wechat_icon_1','sign_btn_2','work_space_3','sign_banner_4'
+        'wechat_icon_1','sign_btn_2','work_space_3','sign_banner_4','sign_banner_4_2'
     ])
 }

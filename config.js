@@ -11,6 +11,8 @@ let isRunningMode = currentEngine.endsWith('/config.js') && typeof module === 'u
 let is_pro = !!Object.prototype.toString.call(com.stardust.autojs.core.timing.TimedTask.Companion).match(/Java(Class|Object)/)
 let extendSignConfig = require('./signConfig.js')
 let custom_config = files.exists('./extends/CustomConfig.js') ? require('./extends/CustomConfig.js') : { supported_signs: [] }
+let WeChatConfig = files.exists('./extends/WeChatConfig.js') ? require('./extends/WeChatConfig.js') : { supported_signs: [] }
+WeChatConfig = WeChatConfig || { supported_signs: [] }
 custom_config = custom_config || { supported_signs: [] }
 let default_config = {
   password: '',
@@ -180,6 +182,7 @@ let default_config = {
       enabled: true
     }
   ].concat(custom_config.supported_signs || [])
+      .concat(WeChatConfig.supported_signs || [])
 }
 // 不同项目需要设置不同的storageName，不然会导致配置信息混乱
 let CONFIG_STORAGE_NAME = 'unify_sign'

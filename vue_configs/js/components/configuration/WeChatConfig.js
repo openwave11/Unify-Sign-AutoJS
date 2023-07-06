@@ -10,6 +10,7 @@ const WeChatConfig = {
         sign_btn_2: '',
         work_space_3: '',
         sign_banner_4: '',
+        sign_banner_4_2: '',
       },
     }
   },
@@ -38,6 +39,7 @@ const WeChatConfig = {
     <base64-image-viewer title="校验消息中的‘打卡’按钮" v-model="configs.sign_btn_2"/>
     <base64-image-viewer title="校验‘工作台’按钮" v-model="configs.work_space_3"/>
     <base64-image-viewer title="校验‘签到的banner’" v-model="configs.sign_banner_4"/>
+    <base64-image-viewer title="校验‘签到的banner2’" v-model="configs.sign_banner_4_2"/>
     
   </div>`
 }
