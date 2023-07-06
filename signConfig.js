@@ -1,5 +1,7 @@
 let { convertDefaultData, getCurrentWorkPath, readImgDataIfExists } = require('./lib/configUtil.js')
+const {infoLog} = require("./lib/prototype/LogUtils");
 let extendCustomSignConfig = files.exists(getCurrentWorkPath() + '/extends/CustomSignConfig.js') ? require('./extends/CustomSignConfig.js') : null
+let wechatSignConfig = files.exists(getCurrentWorkPath() + '/extends/wechatSignConfig.js') ? require('./extends/wechatSignConfig.js') : null
 
 module.exports = function (default_config, config, CONFIG_STORAGE_NAME) {
 
@@ -41,6 +43,7 @@ module.exports = function (default_config, config, CONFIG_STORAGE_NAME) {
 
   // 执行扩展配置
   extendCustomSignConfig && extendCustomSignConfig(binder)
+  wechatSignConfig && wechatSignConfig(binder)
 
 
   function CustomSignConfigBinder (default_config, config, CONFIG_STORAGE_NAME) {
@@ -65,6 +68,8 @@ module.exports = function (default_config, config, CONFIG_STORAGE_NAME) {
       // 将自定义配置挂载到default_config和config
       default_config[custom_config_key + '_config'] = custom_sign_config
       config[custom_config_key + '_config'] = convertDefaultData(custom_sign_config, CONFIG_STORAGE_NAME + '_' + custom_config_key)
+      infoLog.debugForDev(['当前绑定的config是:key:{} 当前值：{}', 'default_config', JSON.stringify(default_config)])
+      infoLog.debugForDev(['当前绑定的config是:key:{} 当前值：{}', 'config', JSON.stringify(config)])
     }
   }
 }

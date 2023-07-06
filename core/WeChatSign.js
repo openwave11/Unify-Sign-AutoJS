@@ -16,6 +16,8 @@ function SignRunner() {
     //'1.wechat_icon', '2.sign_btn', '3.work_space',
     //         '4.sign_banner'
     //'wechat_icon_1','sign_btn_2','work_space_3','sign_banner_4',
+    console.log('自定义签到配置：', JSON.stringify(config.bb_farm_config.click_point))
+
     let wechatIcon_1 = config.wechat_sign_config.wechat_icon_1
     let signBtn_2 = config.wechat_sign_config.sign_btn_2
     let workSpace_3 = config.wechat_sign_config.work_space_3
