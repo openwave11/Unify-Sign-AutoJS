@@ -117,6 +117,8 @@ function SignRunner() {
         } else {
             FloatyInstance.setFloatyText('未找到 企业微信图标，准备去工作台手动签到')
             _logUtils.debugForDev(['未找到 企业微信图标，准备去工作台手动签到'], true, false)
+
+            this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
             //如果没识别到 点击工作台，点击打卡
             this.workSpaceSign();
 
@@ -163,21 +165,36 @@ function SignRunner() {
             if (!ocrSignBanner_4_flag) {
                 ocrSignBanner_4_flag = this.captureAndCheckByImg(sign_banner_4_2, '打卡的Banner', null, true);
                 if (!ocrSignBanner_4_flag) {
-                    automator.scrollUp()
+                    automator.scrollDown()
                     ocrSignBanner_4_flag = this.captureAndCheckByImg(sign_banner_4_2, '打卡的Banner', null, true);
                 }
             }
-            _logUtils.debugForDev(['截图完成查找打卡banner完成结果为：' + ocrSignBanner_4_flag], true, false);
+            _logUtils.debugForDev(['截图完成查找打卡banner完成结果为：' + ocrSignBanner_4_flag.toString()], true, false);
             if (ocrSignBanner_4_flag) {
+                sleep(2000)
 
-                let find = localOcrUtil.recognizeWithBounds(screen, [340, 110], '.*班打卡.*');
+                let screen = commonFunctions.captureScreen()
+                let find = localOcrUtil.recognizeWithBounds(screen, [340, 1110], '.*班打卡.*');
                 if (find && find.length > 0) {
                     let bounds = find[0].bounds
                     FloatyInstance.setFloatyInfo(this.boundsToPosition(bounds), '识别到打卡按钮')
                     sleep(1000)
                     //todo 通知打卡正常，和识别内容
                     automator.click(bounds.centerX(), bounds.centerY())
-                    sleep(1000)
+                    sleep(2000)
+
+                    //截屏识别确认打卡按钮
+                    let screen = commonFunctions.captureScreen()
+                    let confirmSign = localOcrUtil.recognizeWithBounds(screen, null, '.*确认打卡.*')
+                    if (confirmSign && confirmSign.length > 0) {
+                        let confirmSignbounds = confirmSign[0].bounds
+                        FloatyInstance.setFloatyInfo(this.boundsToPosition(confirmSignbounds), '识别到确认打卡')
+                        sleep(1000)
+                        //todo 通知打卡正常，和识别内容
+                        automator.click(confirmSignbounds.centerX(), confirmSignbounds.centerY())
+                        sleep(1000)
+                    }
+
                     this.setExecuted()
                 } else {
                     FloatyInstance.setFloatyInfo('未识别到打卡按钮')
@@ -190,7 +207,7 @@ function SignRunner() {
             }
         } else {
             FloatyInstance.setFloatyInfo('未识别到点击工作台')
-            _logUtils.debugForDev(['未识别到打卡按钮'], true, false);
+            _logUtils.debugForDev(['未识别到点击工作台'], true, false);
         }
     }
 
