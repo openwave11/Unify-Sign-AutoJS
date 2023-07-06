@@ -3,7 +3,7 @@
  * @Date: 2019-12-09 20:42:08
  * @Last Modified by: TonyJiangWJ
  * @Last Modified time: 2023-04-11 10:01:11
- * @Description: 
+ * @Description:
  */
 require('./lib/Runtimes.js')(global)
 let currentEngine = engines.myEngine().getSource() + ''
@@ -62,10 +62,10 @@ let default_config = {
   warn_skipped_ignore_package: false,
   warn_skipped_too_much: false,
   auto_check_update: true,
-  github_url: 'https://github.com/TonyJiangWJ/Unify-Sign',
+  github_url: 'https://github.com/openwave11/Unify-Sign-AutoJS',
   // github release url 用于检测更新状态
-  github_latest_url: 'https://api.github.com/repos/TonyJiangWJ/Unify-Sign/releases/latest',
-  history_tag_url: 'https://api.github.com/repos/TonyJiangWJ/Unify-Sign/tags',
+  github_latest_url: 'https://api.github.com/repos/openwave11/Unify-Sign-AutoJS/releases/latest',
+  history_tag_url: 'https://api.github.com/repos/openwave11/Unify-Sign-AutoJS/tags',
   killAppWithGesture: true,
   // 延迟启动时延 5秒 悬浮窗中进行的倒计时时间
   delayStartTime: 5,
