@@ -107,7 +107,7 @@ function SignRunner() {
 
                     }
                 }
-                this.setExecuted()
+
             } else {
                 FloatyInstance.setFloatyText('未找到 自动打卡对话框，准备去工作台手动签到')
                 _logUtils.debugForDev(['未找到 自动打卡对话框，准备去工作台手动签到'], true, false)
@@ -133,6 +133,7 @@ function SignRunner() {
                 this.exec()
             }
         }
+
 
         sleep(3000)
         !config._debugging && commonFunctions.minimize(_package_name)
@@ -209,6 +210,7 @@ function SignRunner() {
             FloatyInstance.setFloatyInfo('未识别到点击工作台')
             _logUtils.debugForDev(['未识别到点击工作台'], true, false);
         }
+        this.setExecuted()
     }
 
 }

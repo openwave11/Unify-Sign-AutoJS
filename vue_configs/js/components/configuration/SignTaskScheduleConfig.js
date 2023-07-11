@@ -694,6 +694,7 @@ const GroupConfigList = {
         })
     },
     handleConfigChanged: function ({ groupConfig, validationError }) {
+      console.log('准备变更配置信息:', JSON.stringify(groupConfig))
       if (Object.keys(validationError).length == 0) {
         if (groupConfig.id) {
           $nativeApi.request('updateGroupConfig', groupConfig).then(resp => {

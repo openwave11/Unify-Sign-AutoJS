@@ -13,6 +13,6 @@ if (!commonFunctions.ensureAccessibilityEnabled()) {
 // 请求截图权限
 commonFunctions.requestScreenCaptureOrRestart(true)
 
-let signRunner = require('../core/Weibo.js')
+let signRunner = require('../core/Taobao-Sign.js')
 // let signRunner = require('../core/DingDong.js')
-signRunner.setName('微博').exec()
+signRunner.setName('淘宝现金').exec()

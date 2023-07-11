@@ -3,7 +3,7 @@
  * @Date: 2020-04-25 16:46:06
  * @Last Modified by: TonyJiangWJ
  * @Last Modified time: 2022-11-16 19:07:30
- * @Description: 
+ * @Description:
  */
 
 let { config } = require('../config.js')(runtime, this)
@@ -11,7 +11,7 @@ let singletonRequire = require('../lib/SingletonRequirer.js')(runtime, this)
 let commonFunctions = singletonRequire('CommonFunction')
 let alipayUnlocker = singletonRequire('AlipayUnlocker')
 let widgetUtils = singletonRequire('WidgetUtils')
-let logUtils = singletonRequire('LogUtils')
+let _logUtils = singletonRequire('LogUtils')
 let automator = singletonRequire('Automator')
 let FloatyInstance = singletonRequire('FloatyUtil')
 let BaseSignRunner = require('./BaseSignRunner.js')
@@ -65,6 +65,10 @@ function SignRunner () {
     }
 
     this.checkForTargetImg(bb_farm_config.entry_check_alipay, '农场加载校验')
+
+    FloatyInstance.setFloatyInfo('农场加载校验,结果！')
+    _logUtils.debugForDev(['农场加载校验,结果！'], true, false)
+
   }
 
   this.collectAlipayTask = function () {
