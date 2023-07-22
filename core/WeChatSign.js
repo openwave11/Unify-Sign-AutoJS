@@ -41,98 +41,107 @@ function SignRunner() {
         FloatyInstance.setFloatyText('准备查找 企业微信图标')
         _logUtils.debugForDev(['准备查找 企业微信图标'], true, false)
         let clickWechatIcon = null
-        if (localOcrUtil.enabled) {
-            FloatyInstance.setFloatyText('准备用OCR方式查找')
-            _logUtils.debugForDev(['准备用OCR方式查找'], true, false)
-            sleep(10000)
 
-            clickWechatIcon = this.captureAndCheckByImg(wechatIcon_1, '企业微信图标')
-            // clickMine = this.captureAndCheckByOcr('^我$', '我', [config.device_width / 2, config.device_height * 0.7])
-        }
-        // if (!clickMine) {
-        //   clickMine = this.captureAndCheckByImg(mineBtn, '我')
-        //   if (!clickMine) {
-        //     clickMine = this.captureAndCheckByImg(mineCheckedBtn, '我')
-        //   }
-        // }
+        clickWechatIcon = this.captureAndCheckByImg(wechatIcon_1, '企业微信图标', null, true, null)
         if (clickWechatIcon) {
-            automator.clickCenter(clickWechatIcon)
-            FloatyInstance.setFloatyText('等待打开企业微信')
+            FloatyInstance.setFloatyText('等待打开企业微信');
             sleep(40000)
-            //点击之后有可能出现pro会员提示，需要处理
-            _logUtils.debugForDev(['自动打卡对话框'], true, false)
-            if (this.captureAndCheckByImg(signBtn_2, '自动打卡对话框', null, true)) {
-                //打开自动打卡对话框 截图 32 1725 到右下角 ocr识别内容
-                //如果是上午识别 上班自动打卡
-                //如果是下午识别 下班自动打卡
-                if (this.isAmTime()) {
-                    _logUtils.debugForDev(['早上，准备识别上班自动打卡'], true, false)
-
-                    let screen = commonFunctions.captureScreen()
-                    let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*上班自动打卡.*')
-                    if (find && find.length > 0) {
-                        let bounds = find[0].bounds
-                        FloatyInstance.setFloatyInfo(this.boundsToPosition(bounds), '识别到上班自动打卡')
-                        sleep(1000)
-                        //todo 通知打卡正常，和识别内容
-                        automator.click(bounds.centerX(), bounds.centerY())
-                        sleep(1000)
-                    } else {
-                        //如果没识别到 点击工作台，点击打卡
-                        FloatyInstance.setFloatyInfo('未识别到上班自动打卡，去工作台签到')
-                        _logUtils.debugForDev(['早上，未识别到上班自动打卡，去工作台签到'], true, false)
-
-                        this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
-
-                        this.workSpaceSign();
-                    }
-                } else {
-                    _logUtils.debugForDev(['下午，准备识别下班自动打卡'], true, false)
-
-                    let screen = commonFunctions.captureScreen()
-                    let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*下班自动打卡.*')
-                    if (find && find.length > 0) {
-                        let bounds = find[0].bounds
-                        FloatyInstance.setFloatyInfo(this.boundsToPosition(bounds), '识别到下班自动打卡')
-                        sleep(1000)
-                        //todo 通知打卡正常，和识别内容
-                        automator.click(bounds.centerX(), bounds.centerY())
-                        sleep(1000)
-                    } else {
-                        FloatyInstance.setFloatyInfo('未识别到下班自动打卡，去工作台签到')
-                        _logUtils.debugForDev(['下午，未识别到下班自动打卡，去工作台签到'], true, false)
-                        this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
-
-                        this.workSpaceSign();
-
-                    }
-                }
-
-            } else {
-                FloatyInstance.setFloatyText('未找到 自动打卡对话框，准备去工作台手动签到')
-                _logUtils.debugForDev(['未找到 自动打卡对话框，准备去工作台手动签到'], true, false)
-                //如果没识别到 点击工作台，点击打卡
-                this.workSpaceSign();
-            }
-        } else {
-            FloatyInstance.setFloatyText('未找到 企业微信图标，准备去工作台手动签到')
-            _logUtils.debugForDev(['未找到 企业微信图标，准备去工作台手动签到'], true, false)
-
-            this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
-            //如果没识别到 点击工作台，点击打卡
-            this.workSpaceSign();
-
         }
-        //如果今天没执行过，并且重启次数大于1，重新开启应用
-        if (!this.executeIfNeeded()) {
+        if (!clickWechatIcon) {
+            FloatyInstance.setFloatyText('查找虚拟机图标');
+            //查找虚拟机页面，确定出现之后，点击屏幕中心，然后点击进入按钮
+            //如果没找到虚拟机，查找微信图标
+
+            let 虚拟机 = this.captureAndCheckByOcr('^虚拟机$', '虚拟机$');
+            if (虚拟机) {
+                //点击屏幕正中心
+                FloatyInstance.setFloatyText('点击屏幕正中心');
+                automator.click(config.device_width / 2, config.device_height / 2);
+                sleep(1000)
+                FloatyInstance.setFloatyText('识别进入按钮');
+                let clickEntityButton = this.captureAndCheckByOcr('^进入$', '进入按钮', null, 800, true, 2);
+                clickWechatIcon = true;
+                sleep(1000)
+                this.captureAndCheckByOcr('^企业微信$', '企业微信', null, 800, true, 4);
+            }
+        }
+
+
+        if (!clickWechatIcon) {
             if (this.restartLimit-- >= 0) {
-                FloatyInstance.setFloatyText('如果今天没执行过，并且重启次数大于1，重新开启应用')
-                _logUtils.debugForDev(['如果今天没执行过，并且重启次数大于1，重新开启应用'], true, false)
+                FloatyInstance.setFloatyText('未找到 企业微信图标，，并且重启次数大于1，重新开启应用')
+                _logUtils.debugForDev(['未找到 企业微信图标，，并且重启次数大于1，重新开启应用'], true, false)
                 commonFunctions.killCurrentApp()
                 sleep(2000)
                 this.exec()
             }
         }
+
+        //点击之后有可能出现pro会员提示，需要处理
+        _logUtils.debugForDev(['自动打卡对话框'], true, false)
+        if (this.captureAndCheckByImg(signBtn_2, '自动打卡对话框', null, true)) {
+            //打开自动打卡对话框 截图 32 1725 到右下角 ocr识别内容
+            //如果是上午识别 上班自动打卡
+            //如果是下午识别 下班自动打卡
+            if (this.isAmTime()) {
+                _logUtils.debugForDev(['早上，准备识别上班自动打卡'], true, false)
+
+                let screen = commonFunctions.captureScreen()
+                let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*上班自动打卡.*')
+                if (find && find.length > 0) {
+                    let bounds = find[0].bounds
+                    FloatyInstance.setFloatyInfo(this.boundsToPosition(bounds), '识别到上班自动打卡')
+                    sleep(1000)
+                    //todo 通知打卡正常，和识别内容
+                    automator.click(bounds.centerX(), bounds.centerY())
+                    sleep(1000)
+                } else {
+                    //如果没识别到 点击工作台，点击打卡
+                    FloatyInstance.setFloatyInfo('未识别到上班自动打卡，去工作台签到')
+                    _logUtils.debugForDev(['早上，未识别到上班自动打卡，去工作台签到'], true, false)
+
+                    this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
+
+                    this.workSpaceSign();
+                }
+            } else {
+                _logUtils.debugForDev(['下午，准备识别下班自动打卡'], true, false)
+
+                let screen = commonFunctions.captureScreen()
+                let find = localOcrUtil.recognizeWithBounds(screen, [32, 1725], '.*下班自动打卡.*')
+                if (find && find.length > 0) {
+                    let bounds = find[0].bounds
+                    FloatyInstance.setFloatyInfo(this.boundsToPosition(bounds), '识别到下班自动打卡')
+                    sleep(1000)
+                    //todo 通知打卡正常，和识别内容
+                    automator.click(bounds.centerX(), bounds.centerY())
+                    sleep(1000)
+                } else {
+                    FloatyInstance.setFloatyInfo('未识别到下班自动打卡，去工作台签到')
+                    _logUtils.debugForDev(['下午，未识别到下班自动打卡，去工作台签到'], true, false)
+                    this.captureAndCheckByImg(sign_btn_back_5, '点击返回按钮，返回首页', null, true)
+
+                    this.workSpaceSign();
+
+                }
+            }
+
+        } else {
+            FloatyInstance.setFloatyText('未找到 自动打卡对话框，准备去工作台手动签到')
+            _logUtils.debugForDev(['未找到 自动打卡对话框，准备去工作台手动签到'], true, false)
+            //如果没识别到 点击工作台，点击打卡
+            this.workSpaceSign();
+        }
+        // //如果今天没执行过，并且重启次数大于1，重新开启应用
+        // if (!this.executeIfNeeded()) {
+        //     if (this.restartLimit-- >= 0) {
+        //         FloatyInstance.setFloatyText('如果今天没执行过，并且重启次数大于1，重新开启应用')
+        //         _logUtils.debugForDev(['如果今天没执行过，并且重启次数大于1，重新开启应用'], true, false)
+        //         commonFunctions.killCurrentApp()
+        //         sleep(2000)
+        //         this.exec()
+        //     }
+        // }
 
 
         sleep(3000)
@@ -196,7 +205,7 @@ function SignRunner() {
                         sleep(1000)
                     }
 
-                    this.setExecuted()
+                    // this.setExecuted()
                 } else {
                     FloatyInstance.setFloatyInfo('未识别到打卡按钮')
                     _logUtils.debugForDev(['未识别到打卡按钮'], true, false);
@@ -210,7 +219,7 @@ function SignRunner() {
             FloatyInstance.setFloatyInfo('未识别到点击工作台')
             _logUtils.debugForDev(['未识别到点击工作台'], true, false);
         }
-        this.setExecuted()
+        // this.setExecuted()
     }
 
 }
